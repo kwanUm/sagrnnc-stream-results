@@ -1,1 +1,718 @@
-TODO add website
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Online Self-Attentive Gated RNNs for Real-Time Speaker Separation</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="src/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="src/css/scrolling-nav.css" rel="stylesheet">
+
+  </head>
+
+  <body id="page-top">
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" id="mainNav">
+      <div class="container">
+        <!--<a class="navbar-brand js-scroll-trigger" href="#page-top">Drums & Tech</a>-->
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#into">Intro</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#samples">Samples</a>
+            </li>
+            <!--<li class="nav-item">-->
+              <!--<a class="nav-link js-scroll-trigger" href="#Comparison">Comparison</a>-->
+            <!--</li>-->
+            <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#References">References</a>
+            </li>
+            <!-- <li class="nav-item">
+              <a class="nav-link js-scroll-trigger" href="#contact">Contact</a>
+            </li> -->
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <header class="bg-dark text-white">
+      <div class="container text-center">
+        <h1>Online Self-Attentive Gated RNNs for Real-Time Speaker Separation</h1>
+      </div>
+    </header>
+
+    <br>  </br>
+
+
+    <section id="intro">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-15 mx-auto">
+            <!--<h2>Course Details</h2>-->
+            <p class="lead" align="justify">
+            This post presents <a href="https://arxiv.org/abs/2106.13493">"Online Self-Attentive Gated RNNs for Real-Time Speaker
+                Separation"</a>, a streaming deep model for speaker voice separation that works
+                and in real-time. Tested for monaural and binaural settings.
+                </p><p class="lead" align="justify">
+                We transform a state-of-the-art separation model to operate causally and in an
+                online streaming manner on audio speech. We evaluate the performance
+                of the model when working online on a stream of data against an offline model.
+                We compare the performance of the proposed model to several baseline methods
+                under anechoic, noisy, and noisy-reverberant recording conditions while exploring
+                both monaural and binaural inputs and outputs.
+
+                Our findings shed light on the relative difference between causal and non-causal
+                models when performing separation. Our stateful implementation for online separation leads
+                to a minor drop in performance compared to the offline model; 0.8dB for monaural
+                inputs and 0.3dB for binaural inputs while reaching a real-time factor of 0.65.
+
+          </div>
+        </div>
+    <br>  </br>
+            <div class="container">
+              <div class="row">
+                <h3>Results - binaural</h3>
+                <br>
+              </div>
+              <div class="row">
+                  <img src="src/images/table_comparison.png" alt="Italian Trulli" width="800px">
+                  <br><br>
+              </div>
+                <br>
+              <div class="row">
+                <h3>Results - monaural</h3>
+                <br>
+              </div>
+                <div class="row">
+                  <img src="src/images/table_monaural.png" alt="Italian Trulli" width="600px">
+              </div>
+
+<!--              <div class="row">-->
+<!--                <h3>Architecture and streaming implementation</h3>-->
+<!--                <br><br><br>-->
+<!--              </div>-->
+<!--              <div class="row">-->
+<!--                  <div class="col-md-5">-->
+<!--                      <embed src="src/images/chunking-1.jpg" alt="Italian Trulli" width="400px">-->
+<!--                  </div>-->
+<!--                  <div class="col-md-5">-->
+<!--                      <embed src="src/images/streaming_pipeline-1.jpg" alt="Italian Trulli" width="450px">-->
+<!--                  </div>-->
+<!--            </div>-->
+        </div>
+      </div>
+    </section>
+
+    <section id="samples" class="bg-light">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-13 mx-auto">
+            <p class="lead" align="justify">
+                Following are samples from the model on different test datasets:
+                <ul class="lead" align="justify" >
+                  <li>Mixture input - original mixed audio</li>
+                  <li>Ground Truth - original separated samples</li>
+                  <li>Offline - A causal SAGRNN [1] model that transforms a whole audio file at once (without online streaming)</li>
+                  <li>Stateless - A naive implementation of the causal SAGRNN to work in streaming mode, where the model does not keep internal state between calls</li>
+                  <li>Statful - An implementation of the causal SAGRNN to work in streaming mode, where the model keeps an internal state between calls</li>
+
+                </ul>
+              <small>* For more information about the stateless and stateful streaming modes of operation,
+                        see our paper at Section 4. (Method).</small>
+            </p>
+            <style type="text/css">
+                .tg  {border-collapse:collapse;border-spacing:0;}
+                .tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+                .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;border-color:black;}
+                .tg .tg-oe15{background-color:#f8f9fa;border-color:#f8f9fa;text-align:center;vertical-align:top}
+                audio { width: 130px; }
+            </style>
+
+
+              <br>  </br>
+
+            <center>
+<!--                11111111111111-->
+            <h3>WSJ clean - binaural</h3>
+            <p></p>
+            <p></p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Mixture input</th>
+                  <th>Ground Truth</th>
+                  <th>Offline</th>
+                  <th>Stateless</th>
+                  <th>Stateful</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-top:1px solid black">
+                  <td rowspan="2"><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_clean__binaural-True__nonstreaming/recpid_1003.mix.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_clean__binaural-True__nonstreaming/recpid_1003.mix_gt_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_clean__binaural-True__nonstreaming/recpid_1003.mix_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_clean__binaural-True__stateless/recpid_1003.mix_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_clean__binaural-True__stateful/recpid_1003.mix_s1.wav"
+                        type="audio/wav"></audio></td>
+                </tr>
+                <tr>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_clean__binaural-True__nonstreaming/recpid_1003.mix_gt_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_clean__binaural-True__nonstreaming/recpid_1003.mix_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_clean__binaural-True__stateless/recpid_1003.mix_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_clean__binaural-True__stateful/recpid_1003.mix_s2.wav"
+                        type="audio/wav"></audio></td>
+                </tr>
+                <tr style="border-top:1px solid black">
+                  <td rowspan="2"><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_clean__binaural-True__nonstreaming/recpid_100.mix.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_clean__binaural-True__nonstreaming/recpid_100.mix_gt_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_clean__binaural-True__nonstreaming/recpid_100.mix_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_clean__binaural-True__stateless/recpid_100.mix_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_clean__binaural-True__stateful/recpid_100.mix_s1.wav"
+                        type="audio/wav"></audio></td>
+                </tr>
+                <tr>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_clean__binaural-True__nonstreaming/recpid_100.mix_gt_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_clean__binaural-True__nonstreaming/recpid_100.mix_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_clean__binaural-True__stateless/recpid_100.mix_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_clean__binaural-True__stateful/recpid_100.mix_s2.wav"
+                        type="audio/wav"></audio></td>
+                </tr>
+              </tbody>
+            </table>
+
+
+
+              <br>  </br>
+
+
+
+<!--                222222222222222-->
+                            <h3>WSJ noisy - binaural</h3>
+            <p></p>
+            <p></p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Mixture input</th>
+                  <th>Ground Truth</th>
+                  <th>Offline</th>
+                  <th>Stateless</th>
+                  <th>Stateful</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-top:1px solid black">
+                  <td rowspan="2"><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi__binaural-True__nonstreaming/recpid_1005.snr_8.452358061565707_mix.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi__binaural-True__nonstreaming/recpid_1005.snr_8.452358061565707_mix_gt_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi__binaural-True__nonstreaming/recpid_1005.snr_8.452358061565707_mix_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi__binaural-True__stateless/recpid_1005.snr_8.452358061565707_mix_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi__binaural-True__stateful/recpid_1005.snr_8.452358061565707_mix_s1.wav"
+                        type="audio/wav"></audio></td>
+                </tr>
+                <tr>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi__binaural-True__nonstreaming/recpid_1005.snr_8.452358061565707_mix_gt_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi__binaural-True__nonstreaming/recpid_1005.snr_8.452358061565707_mix_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi__binaural-True__stateless/recpid_1005.snr_8.452358061565707_mix_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi__binaural-True__stateful/recpid_1005.snr_8.452358061565707_mix_s2.wav"
+                        type="audio/wav"></audio></td>
+                </tr>
+                <tr style="border-top:1px solid black">
+                  <td rowspan="2"><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi__binaural-True__nonstreaming/recpid_1077.snr_-5.65036293718665_mix.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi__binaural-True__nonstreaming/recpid_1077.snr_-5.65036293718665_mix_gt_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi__binaural-True__nonstreaming/recpid_1077.snr_-5.65036293718665_mix_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi__binaural-True__stateless/recpid_1077.snr_-5.65036293718665_mix_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi__binaural-True__stateful/recpid_1077.snr_-5.65036293718665_mix_s1.wav"
+                        type="audio/wav"></audio></td>
+                </tr>
+                <tr>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi__binaural-True__nonstreaming/recpid_1077.snr_-5.65036293718665_mix_gt_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi__binaural-True__nonstreaming/recpid_1077.snr_-5.65036293718665_mix_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi__binaural-True__stateless/recpid_1077.snr_-5.65036293718665_mix_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi__binaural-True__stateful/recpid_1077.snr_-5.65036293718665_mix_s2.wav"
+                        type="audio/wav"></audio></td>
+                </tr>
+              </tbody>
+            </table>
+
+
+
+              <br>  </br>
+
+
+
+
+
+<!--                333333333333333-->
+            <h3>WSJ noisey-reverberant - binaural</h3>
+            <p></p>
+            <p></p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Mixture input</th>
+                  <th>Ground Truth</th>
+                  <th>Offline</th>
+                  <th>Stateless</th>
+                  <th>Stateful</th>
+                </tr>
+              </thead>
+              <tbody>
+              <tr style="border-top:1px solid black">
+                  <td rowspan="2"><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_reverb__binaural-True__nonstreaming/recpid_1093.snr_-0.7291341873124964_mix.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_reverb__binaural-True__nonstreaming/recpid_1093.snr_-0.7291341873124964_mix_gt_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_reverb__binaural-True__nonstreaming/recpid_1093.snr_-0.7291341873124964_mix_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_reverb__binaural-True__stateless/recpid_1093.snr_-0.7291341873124964_mix_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_reverb__binaural-True__stateful/recpid_1093.snr_-0.7291341873124964_mix_s1.wav"
+                        type="audio/wav"></audio></td>
+                </tr>
+                <tr>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_reverb__binaural-True__nonstreaming/recpid_1093.snr_-0.7291341873124964_mix_gt_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_reverb__binaural-True__nonstreaming/recpid_1093.snr_-0.7291341873124964_mix_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_reverb__binaural-True__stateless/recpid_1093.snr_-0.7291341873124964_mix_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_reverb__binaural-True__stateful/recpid_1093.snr_-0.7291341873124964_mix_s2.wav"
+                        type="audio/wav"></audio></td>
+                </tr>
+                <tr style="border-top:1px solid black">
+                  <td rowspan="2"><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_reverb__binaural-True__nonstreaming/recpid_1079.snr_-5.2860464350306895_mix.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_reverb__binaural-True__nonstreaming/recpid_1079.snr_-5.2860464350306895_mix_gt_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_reverb__binaural-True__nonstreaming/recpid_1079.snr_-5.2860464350306895_mix_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_reverb__binaural-True__stateless/recpid_1079.snr_-5.2860464350306895_mix_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_reverb__binaural-True__stateful/recpid_1079.snr_-5.2860464350306895_mix_s1.wav"
+                        type="audio/wav"></audio></td>
+                </tr>
+                <tr>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_reverb__binaural-True__nonstreaming/recpid_1079.snr_-5.2860464350306895_mix_gt_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_reverb__binaural-True__nonstreaming/recpid_1079.snr_-5.2860464350306895_mix_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_reverb__binaural-True__stateless/recpid_1079.snr_-5.2860464350306895_mix_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix_bi_reverb__binaural-True__stateful/recpid_1079.snr_-5.2860464350306895_mix_s2.wav"
+                        type="audio/wav"></audio></td>
+                </tr>
+              </tbody>
+            </table>
+
+              <br>  </br>
+<!--                444444444444-->
+            <h3>WSJ clean - monaural</h3>
+            <p></p>
+            <p></p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Mixture input</th>
+                  <th>Ground Truth</th>
+                  <th>Offline</th>
+                  <th>Stateless</th>
+                  <th>Stateful</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-top:1px solid black">
+                  <td rowspan="2"><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix__binaural-False__nonstreaming/050o020k_0.90614_22go010g_-0.90614.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix__binaural-False__nonstreaming/050o020k_0.90614_22go010g_-0.90614_gt_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix__binaural-False__nonstreaming/050o020k_0.90614_22go010g_-0.90614_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix__binaural-False__stateless/050o020k_0.90614_22go010g_-0.90614_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix__binaural-False__stateful/050o020k_0.90614_22go010g_-0.90614_s2.wav"
+                        type="audio/wav"></audio></td>
+                </tr>
+                <tr>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix__binaural-False__nonstreaming/050o020k_0.90614_22go010g_-0.90614_gt_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix__binaural-False__nonstreaming/050o020k_0.90614_22go010g_-0.90614_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix__binaural-False__stateless/050o020k_0.90614_22go010g_-0.90614_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix__binaural-False__stateful/050o020k_0.90614_22go010g_-0.90614_s1.wav"
+                        type="audio/wav"></audio></td>
+                </tr>
+                <tr style="border-top:1px solid black">
+                  <td rowspan="2"><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix__binaural-False__nonstreaming/050c010i_0.15396_442c020z_-0.15396.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix__binaural-False__nonstreaming/050c010i_0.15396_442c020z_-0.15396_gt_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix__binaural-False__nonstreaming/050c010i_0.15396_442c020z_-0.15396_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix__binaural-False__stateless/050c010i_0.15396_442c020z_-0.15396_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix__binaural-False__stateful/050c010i_0.15396_442c020z_-0.15396_s2.wav"
+                        type="audio/wav"></audio></td>
+                </tr>
+                <tr>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix__binaural-False__nonstreaming/050c010i_0.15396_442c020z_-0.15396_gt_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix__binaural-False__nonstreaming/050c010i_0.15396_442c020z_-0.15396_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix__binaural-False__stateless/050c010i_0.15396_442c020z_-0.15396_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wsj2mix__binaural-False__stateful/050c010i_0.15396_442c020z_-0.15396_s1.wav"
+                        type="audio/wav"></audio></td>
+                </tr>
+              </tbody>
+            </table>
+
+
+<br>  </br>
+
+<!--                5555555555-->
+                            <h3>WSJ noisy - monaural</h3>
+            <p></p>
+            <p></p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Mixture input</th>
+                  <th>Ground Truth</th>
+                  <th>Offline</th>
+                  <th>Stateless</th>
+                  <th>Stateful</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-top:1px solid black">
+                  <td rowspan="2"><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wham__binaural-False__nonstreaming/050a0502_1.463_420a010o_-1.463.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wham__binaural-False__nonstreaming/050a0502_1.463_420a010o_-1.463_gt_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wham__binaural-False__nonstreaming/050a0502_1.463_420a010o_-1.463_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wham__binaural-False__stateless/050a0502_1.463_420a010o_-1.463_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wham__binaural-False__stateful/050a0502_1.463_420a010o_-1.463_s2.wav"
+                        type="audio/wav"></audio></td>
+                </tr>
+                <tr>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wham__binaural-False__nonstreaming/050a0502_1.463_420a010o_-1.463_gt_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wham__binaural-False__nonstreaming/050a0502_1.463_420a010o_-1.463_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wham__binaural-False__stateless/050a0502_1.463_420a010o_-1.463_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wham__binaural-False__stateful/050a0502_1.463_420a010o_-1.463_s1.wav"
+                        type="audio/wav"></audio></td>
+                </tr>
+                <tr style="border-top:1px solid black">
+                  <td rowspan="2"><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wham__binaural-False__nonstreaming/050c010s_2.3259_445o030w_-2.3259.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wham__binaural-False__nonstreaming/050c010s_2.3259_445o030w_-2.3259_gt_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wham__binaural-False__nonstreaming/050c010s_2.3259_445o030w_-2.3259_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wham__binaural-False__stateless/050c010s_2.3259_445o030w_-2.3259_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wham__binaural-False__stateful/050c010s_2.3259_445o030w_-2.3259_s2.wav"
+                        type="audio/wav"></audio></td>
+                </tr>
+                <tr>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wham__binaural-False__nonstreaming/050c010s_2.3259_445o030w_-2.3259_gt_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wham__binaural-False__nonstreaming/050c010s_2.3259_445o030w_-2.3259_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wham__binaural-False__stateless/050c010s_2.3259_445o030w_-2.3259_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-wham__binaural-False__stateful/050c010s_2.3259_445o030w_-2.3259_s1.wav"
+                        type="audio/wav"></audio></td>
+                </tr>
+              </tbody>
+            </table>
+
+
+
+
+
+
+
+
+
+<br>  </br>
+
+
+
+
+
+<!--             66666666666-->
+                            <h3>WSJ noisy-reverberant - monaural</h3>
+            <p></p>
+            <p></p>
+            <table>
+              <thead>
+                <tr>
+                  <th>Mixture input</th>
+                  <th>Ground Truth</th>
+                  <th>Offline</th>
+                  <th>Stateless</th>
+                  <th>Stateful</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-top:1px solid black">
+                  <td rowspan="2"><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-whamr__binaural-False__nonstreaming/050o020q_1.7926_444o030f_-1.7926.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-whamr__binaural-False__nonstreaming/050o020q_1.7926_444o030f_-1.7926_gt_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-whamr__binaural-False__nonstreaming/050o020q_1.7926_444o030f_-1.7926_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-whamr__binaural-False__stateless/050o020q_1.7926_444o030f_-1.7926_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-whamr__binaural-False__stateful/050o020q_1.7926_444o030f_-1.7926_s2.wav"
+                        type="audio/wav"></audio></td>
+                </tr>
+                <tr>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-whamr__binaural-False__nonstreaming/050o020q_1.7926_444o030f_-1.7926_gt_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-whamr__binaural-False__nonstreaming/050o020q_1.7926_444o030f_-1.7926_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-whamr__binaural-False__stateless/050o020q_1.7926_444o030f_-1.7926_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-whamr__binaural-False__stateful/050o020q_1.7926_444o030f_-1.7926_s1.wav"
+                        type="audio/wav"></audio></td>
+                </tr>
+                <tr style="border-top:1px solid black">
+                  <td rowspan="2"><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-whamr__binaural-False__nonstreaming/050a050a_1.7521_422c020j_-1.7521.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-whamr__binaural-False__nonstreaming/050a050a_1.7521_422c020j_-1.7521_gt_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-whamr__binaural-False__nonstreaming/050a050a_1.7521_422c020j_-1.7521_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-whamr__binaural-False__stateless/050a050a_1.7521_422c020j_-1.7521_s2.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-whamr__binaural-False__stateful/050a050a_1.7521_422c020j_-1.7521_s2.wav"
+                        type="audio/wav"></audio></td>
+                </tr>
+                <tr>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-whamr__binaural-False__nonstreaming/050a050a_1.7521_422c020j_-1.7521_gt_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-whamr__binaural-False__nonstreaming/050a050a_1.7521_422c020j_-1.7521_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-whamr__binaural-False__stateless/050a050a_1.7521_422c020j_-1.7521_s1.wav"
+                        type="audio/wav"></audio></td>
+                  <td><audio controls class="audio-player" preload="metadata" style="width: 180px;">
+                      <source src="src/samples/dset-whamr__binaural-False__stateful/050a050a_1.7521_422c020j_-1.7521_s1.wav"
+                        type="audio/wav"></audio></td>
+                </tr>
+              </tbody>
+            </table>
+
+
+
+
+
+
+
+
+			</center>                        
+          </div>
+        </div>
+      </div>
+    </section>    
+	</center>
+    <section id="code" class="bg-light">
+    	<center><h3>Code</h3></center>
+    	<div class="container">
+	    	<div class="row">
+	    		<p class="lead" align="justify"> Code will be available under the following repo: </p>
+	    	</div>
+	    </div>
+    </section>
+
+    <section id="Reference" class="bg-white">
+      <center><h3>References</h3></center>
+
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-13 mx-auto">
+              <p class="lead" align="justify">
+                    <p class="lead" align="justify">
+                        [1]. Ke Tan et al. "SAGRNN: Self-Attentive Gated RNN for Binaural Speaker Separation with Interaural Cue Preservation"
+                    </p>
+              </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-5 bg-dark">
+      <div class="container">
+        <!-- <p class="m-0 text-center text-white">Copyright &copy; Your Website 2017</p> -->
+      </div>
+      <!-- /.container -->
+    </footer>
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="src/vendor/jquery/jquery.min.js"></script>
+    <script src="src/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="src/vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom JavaScript for this theme -->
+    <script src="src/js/scrolling-nav.js"></script>
+
+  </body>
+</html>
